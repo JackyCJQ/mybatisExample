@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="dbconfig.properties"></properties>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <!--<typeAliases>-->
+        <!--<package name="com.jacky.plugin.bean"/>-->
+    <!--</typeAliases>-->
+    <!--<plugins>-->
+        <!--&lt;!&ndash; <plugin interceptor="MyFirstPlugin">-->
+             <!--<property name="username" value="root"/>-->
+             <!--<property name="password" value="123456"/>-->
+         <!--</plugin>-->
+         <!--<plugin interceptor="MySecondPlugin"></plugin>&ndash;&gt;-->
+        <!--&lt;!&ndash;<plugin interceptor="com.github.pagehelper.PageInterceptor">&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;<property name="dialect" value="mysql"/>&ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;</plugin>&ndash;&gt;-->
+        <!--&lt;!&ndash;<plugin interceptor="com.jacky.plugin.plugin.MyThirdPlugin">&ndash;&gt;-->
+        <!--&lt;!&ndash;<property name="id" value="12"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</plugin>&ndash;&gt;-->
+    <!--</plugins>-->
+
+    <environments default="dev_mysql">
+        <environment id="dev_mysql">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!-- 批量注册： -->
+        <package name="com.jacky.plugin.dao"/>
+    </mappers>
+</configuration>

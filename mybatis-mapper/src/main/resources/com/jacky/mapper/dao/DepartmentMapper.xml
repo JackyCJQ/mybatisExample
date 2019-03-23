@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jacky.mapper.dao.DepartmentMapper">
+
+    <!--###################################################################-->
+    <!--嵌套结果集的方式，使用collection标签定义关联的集合类型的属性封装规则  -->
+    <resultMap id="MyDept" type="com.jacky.mapper.bean.Department">
+        <id column="did" property="id"/>
+        <result column="dept_name" property="departmentName"/>
+        <!--
+            collection定义关联集合类型的属性的封装规则
+            ofType:指定集合里面元素的类型
+        -->
+        <collection property="emps" ofType="com.jacky.mapper.bean.Employee">
+            <!-- 定义这个集合中元素的封装规则 -->
+            <id column="eid" property="id"/>
+            <result column="last_name" property="lastName"/>
+            <result column="email" property="email"/>
+            <result column="gender" property="gender"/>
+        </collection>
+    </resultMap>
+    <!-- 直接一步查出关联语句 -->
+    <select id="getDeptByIdPlus" resultMap="MyDept">
+		SELECT
+		    d.id did,
+		    d.dept_name dept_name,
+			e.id eid,
+			e.last_name last_name,
+			e.email email,
+			e.gender gender
+		FROM tbl_dept d
+		LEFT JOIN tbl_employee e
+		ON d.id=e.d_id
+		WHERE d.id=#{id}
+	</select>
+    <!--###################################################################-->
+    <!-- 扩展：多列的值传递过去：
+           将多列的值封装map传递；
+           key为另一个sql语句中的#{}里面的值
+           column="{key1=column1,key2=column2}"
+           fetchType="lazy"：表示使用延迟加载；
+               - lazy：延迟
+               - eager：立即
+    -->
+    <resultMap id="MyDeptStep" type="com.jacky.mapper.bean.Department">
+        <id column="id" property="id"/>
+        <id column="dept_name" property="departmentName"/>
+        <collection property="emps"
+                    select="com.jacky.mapper.dao.EmployeeMapper.getEmpById"
+                    column="{deptid=id}" fetchType="lazy">
+
+        </collection>
+    </resultMap>
+
+    <select id="getDeptByIdStep" resultMap="MyDeptStep">
+		select id,dept_name from tbl_dept where id=#{id}
+	</select>
+
+    <!--###################################################################-->
+    <select id="getDeptById" resultType="com.jacky.mapper.bean.Department">
+        select id,dept_name departmentName from tbl_dept where id=#{id}
+    </select>
+
+
+</mapper>
